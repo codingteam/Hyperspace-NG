@@ -9,28 +9,46 @@ public class Ship : MonoBehaviour
 	public float rotationSpeed;
 	public float thrust;
 
-	void Update()
+	public InputMapping input;
+
+	private void RotateCCW()
 	{
-		if(Input.GetKey(KeyCode.LeftArrow))
-		{
-			transform.Rotate(Vector3.up, -rotationSpeed*Time.deltaTime);
-		}
-		if(Input.GetKey(KeyCode.RightArrow))
-		{
-			transform.Rotate(Vector3.up, rotationSpeed*Time.deltaTime);
-		}
-		if(Input.GetKey(KeyCode.UpArrow))
-		{
-			rigidbody.velocity += transform.forward * thrust*Time.deltaTime / rigidbody.velocity.magnitude;
-		}
-		
-		if(Input.GetKey(KeyCode.Space))
-		{
-            foreach(var weapon in weapons)
-			{
-				weapon.Fire();
-			}
-		}
+		transform.Rotate(Vector3.up, -rotationSpeed*Time.deltaTime);
 	}
+
+	private void RotateCW()
+	{
+		transform.Rotate(Vector3.up, rotationSpeed*Time.deltaTime);
+    }
+
+	private void Accelerate()
+	{
+		//NOTE The acceleration is divided by velocity to impose a soft limit on max speed.
+		rigidbody.velocity += transform.forward * thrust*Time.deltaTime / rigidbody.velocity.magnitude;
+	}
+
+	private void Fire()
+	{
+		foreach(var weapon in weapons)
+		{
+			weapon.Fire();
+        }
+    }
+
+	void OnEnable()
+	{
+		input.OnInputRotateCCW += RotateCCW;
+		input.OnInputRotateCW += RotateCW;
+		input.OnInputAccelerate += Accelerate;
+		input.OnInputFire += Fire;
+	}
+
+	void OnDisable()
+	{
+		input.OnInputRotateCCW -= RotateCCW;
+		input.OnInputRotateCW -= RotateCW;
+		input.OnInputAccelerate -= Accelerate;
+		input.OnInputFire -= Fire;
+	}	
 }
 
