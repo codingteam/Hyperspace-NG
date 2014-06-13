@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class GameController : MonoBehaviour {
 
-	public GravitySource[] gravitySources;
+	public List<GravitySource> gravitySources;
 }

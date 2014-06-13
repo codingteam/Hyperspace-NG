@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class MovingObject : MonoBehaviour {
 
-	private GravitySource[] gravitySources;
+	private List<GravitySource> gravitySources;
 	public bool alignToMovement;
 
 	void Start()
 	{
-		GameObject gameController = GameObject.FindWithTag("GameController");
-		gravitySources = gameController.GetComponent<GameController>().gravitySources;
+		var gameController = GameObject.FindWithTag("GameController").GetComponent<GameController>();
+		gravitySources = gameController.gravitySources;
 		rigidbody.freezeRotation = true;
 		Align ();
 	}
